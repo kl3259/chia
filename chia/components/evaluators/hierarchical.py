@@ -9,18 +9,20 @@ class HierarchicalEvaluator(Evaluator):
     def __init__(self, kb: knowledge.KnowledgeBase):
         self.kb = kb
         self.sample_count = 0
-        self.running_cm = dict()
+        self.running_cm = dict() # dictionary of key:(gt_uid, pred_uid) -> value:count
 
     def reset(self):
         self.sample_count = 0
         self.running_cm = dict()
 
     def update(self, samples, gt_resource_id, prediction_resource_id):
+        # used to filter data resource????
         for sample in iter(samples):
             gt_uid = sample.get_resource(gt_resource_id)
             pred_uid = sample.get_resource(prediction_resource_id)
 
             # Confusion Matrix
+
             if (gt_uid, pred_uid) in self.running_cm.keys():
                 self.running_cm[(gt_uid, pred_uid)] += 1
             else:
@@ -29,8 +31,8 @@ class HierarchicalEvaluator(Evaluator):
             self.sample_count += 1
 
     def result(self):
-        rgraph = self.kb.get_hyponymy_relation_rgraph()
-        root = next(nx.topological_sort(rgraph))
+        rgraph = self.kb.get_hyponymy_relation_rgraph() # get knowledge graph
+        root = next(nx.topological_sort(rgraph)) # get root node
 
         # Semantic Distance
         running_distance = 0
@@ -41,7 +43,7 @@ class HierarchicalEvaluator(Evaluator):
 
         sample_count_confused = 0
         ugraph = self.kb.get_hyponymy_relation().ugraph()
-        for (gt_uid, pred_uid), count in self.running_cm.items():
+        for (gt_uid, pred_uid), count in self.running_cm.items(): # confusion matrix
             lca = nx.lowest_common_ancestor(rgraph, gt_uid, pred_uid)
             lca_depth = nx.shortest_path_length(rgraph, root, lca) + 1
 

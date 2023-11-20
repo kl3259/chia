@@ -1,7 +1,7 @@
 from chia.knowledge.concept import Concept, ConceptFlag
 from chia.knowledge.information_content import (
     InformationContentCalculator,
-    InformationContentCalculatorFactory,
+    InformationContentCalculatorFactory
 )
 from chia.knowledge.knowledge_base import KnowledgeBase, KnowledgeBaseFactory
 from chia.knowledge.messages import ConceptChangeMessage, RelationChangeMessage

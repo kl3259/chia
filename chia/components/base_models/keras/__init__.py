@@ -17,8 +17,8 @@ def _get_input_img_np(sample):
 
 class KerasOptimizerFactory(components.Factory):
     name_to_class_mapping = {
-        "adam": tf.keras.optimizers.Adam,
-        "sgd": tf.keras.optimizers.SGD,
+        "adam": tf.keras.optimizers.legacy.Adam,
+        "sgd": tf.keras.optimizers.legacy.SGD,
     }
     default_section = "keras_optimizer"
     i_know_that_var_args_are_not_supported = True

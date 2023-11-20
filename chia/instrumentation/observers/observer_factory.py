@@ -1,4 +1,5 @@
 from chia import components
+from chia.components.Factory import Factory
 from chia.instrumentation.observers import (
     buffered_observer,
     json_observer,
@@ -6,7 +7,7 @@ from chia.instrumentation.observers import (
 )
 
 
-class ObserverFactory(components.Factory):
+class ObserverFactory(components.Factory.Factory):
     name_to_class_mapping = {
         "buffered": buffered_observer.BufferedObserver,
         "stream": stream_observer.StreamObserver,

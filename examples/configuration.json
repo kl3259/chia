@@ -7,7 +7,7 @@
       "name": "accuracy"
     }
   ],
-  "with_wordnet": true,
+  "with_wordnet": false,
   "interactor": {
     "name": "oracle"
   },
@@ -28,14 +28,14 @@
     "validate_on_test_set": true
   },
   "dataset": {
-    "name": "icifar"
+    "name": "icifar_v2" 
   },
   "extrapolator": {
     "name": "do_nothing"
   },
   "model": {
     "classifier": {
-      "name": "keras_onehot",
+      "name": "chillax",
       "l2": 5e-5,
       "force_prediction_targets": true,
       "raw_output": false

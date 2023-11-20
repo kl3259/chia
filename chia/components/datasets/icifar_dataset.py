@@ -325,3 +325,146 @@ class iCIFARDataset(dataset.Dataset):
         return [
             f"{_namespace_uid}::{concept_uid}" for concept_uid, _ in _labels_to_wordnet
         ]
+
+
+
+class iCIFARDataset_v2(dataset.Dataset):
+    def __init__(self, R, sngl = True, comp = False):
+        '''
+        R generated in HENN method
+        '''
+        import tensorflow as tf
+
+        # replace with blurred data
+        train_ds = np.load("/data/kxl230000/HENN_Experiments/data/cifar100_train_ds.npz")
+        test_ds = np.load("/data/kxl230000/HENN_Experiments/data/cifar100_test_ds.npz")
+        self.train_X = train_ds["x"].transpose((1, 3))
+        self.train_y = train_ds["y"]
+        self.test_X = test_ds["x"].transpose((1, 3))
+        self.test_y = test_ds["y"]
+        assert self.train_X.shape == (45000, 224, 224, 3)
+        assert self.test_X.shape == (10000, 224, 224, 3)
+
+        self.sequence_seed = 19219
+        self._update_sequence()
+
+        sorting_sequence_train = np.argsort(self.train_y[:, 0], kind="stable")
+        self.train_X = self.train_X[sorting_sequence_train]
+        self.train_y = self.train_y[sorting_sequence_train]
+
+        # Attributes are assigned in setup()
+        self.classes_per_batch = None
+        self.setup()
+
+    def setup(self, classes_per_batch=4, **kwargs):
+        self.classes_per_batch = classes_per_batch
+
+    def train_pool_count(self):
+        return self.get_train_pool_count(self.classes_per_batch)
+
+    def val_pool_count(self):
+        return 0
+
+    def test_pool_count(self):
+        return 1
+
+    def train_pool(self, index, label_resource_id):
+        return self.get_train_pool_for(index, label_resource_id, self.classes_per_batch)
+
+    def val_pool(self, index, label_resource_id):
+        raise ValueError("This dataset does not have a validation pool!")
+
+    def test_pool(self, index, label_resource_id):
+        assert index == 0
+        return self.get_test_pool(label_resource_id)
+
+    def namespace(self):
+        return _namespace_uid
+
+    def _update_sequence(self):
+        random.seed(self.sequence_seed)
+        self.sequence = random.sample(range(100), 100)
+
+    def get_train_pool_count(self, classes_per_batch):
+        return 100 // classes_per_batch
+
+    def get_train_pool_for(self, batch, label_resource_id, classes_per_batch):
+        assert (100 % classes_per_batch) == 0
+        batch_count = 100 // classes_per_batch
+        assert batch < batch_count
+
+        samples = []
+        classes_for_pool = self.sequence[
+            (batch * classes_per_batch) : (batch + 1) * classes_per_batch
+        ]
+
+        # print(f"Retrieving images for classes {classes_for_pool}")
+        for class_ in classes_for_pool:
+            training_data_range = list(range(500 * class_, 500 * (class_ + 1)))
+            class_X = self.train_X[500 * class_ : 500 * (class_ + 1)]
+            class_y = self.train_y[500 * class_ : 500 * (class_ + 1)]
+            samples += self._build_samples(
+                class_X, class_y, training_data_range, label_resource_id, "train"
+            )
+
+        return samples
+
+    def get_test_pool(self, label_resource_id):
+        return self._build_samples(
+            self.test_X, self.test_y, range(0, 10000), label_resource_id, "test"
+        )
+
+    def _build_samples(self, X, y, data_range, label_resource_id, prefix):
+        assert X.shape[0] == len(data_range)
+        samples = []
+        for i, data_id in enumerate(data_range):
+            class_label = y[i, 0]
+            np_image = X[i]
+            samples += [
+                data.Sample(
+                    source=self.__class__.__name__,
+                    uid=f"{_namespace_uid}::{prefix}.{data_id}",
+                )
+                .add_resource(self.__class__.__name__, "input_img_np", np_image)
+                .add_resource(
+                    self.__class__.__name__,
+                    label_resource_id,
+                    f"{_namespace_uid}::{_label_names[int(class_label)]}",
+                )
+            ]
+        return samples
+
+    def get_hyponymy_relation_source(self):
+        # replace with 2 level hierarachy
+        return relation.StaticRelationSource(
+            [
+                (f"{_namespace_uid}::{label}", f"WordNet3.0::{synset}")
+                for label, synset in _labels_to_wordnet
+            ]
+        )
+
+    def get_hyponymy_relation_source_v2(self, R):
+        '''
+        Ignore subclasses without superclass
+        '''
+        relation_list = []
+        for (key, value) in R.items():
+            if key >= 100:
+                for i in range(len(value)):
+                    relation_list.append((key, value[i]))
+
+        return relation.StaticRelationSource(
+            relation_list
+        )
+
+    def prediction_targets(self):
+        return [
+            f"{_namespace_uid}::{concept_uid}" for concept_uid, _ in _labels_to_wordnet
+        ]
+
+    def prediction_targets_v2(self, sngl, comp):
+        if sngl:
+            return list(np.arange(100))
+        if comp:
+            return list(np.arange(115))
+

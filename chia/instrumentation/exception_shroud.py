@@ -25,5 +25,5 @@ class ExceptionShroud(observable.Observable):
         return False
 
 
-class ExceptionShroudFactory(components.Factory):
+class ExceptionShroudFactory(components.Factory.Factory):
     name_to_class_mapping = ExceptionShroud

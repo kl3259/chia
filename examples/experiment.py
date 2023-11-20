@@ -17,6 +17,7 @@ def main(config_files):
         pcfg.config_from_json(config_file, read_from_file=True)
         for config_file in config_files
     ]
+    print(configs)
 
     # Read user configuration file ~/.chiarc
     # This file contains user-specific paths for datasets
@@ -45,4 +46,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(prog="experiment")
     parser.add_argument("config_file", type=str, nargs="+")
     args = parser.parse_args()
+    print(args.config_file)
+    breakpoint()
     main(config_files=args.config_file)
+    

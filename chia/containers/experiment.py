@@ -145,5 +145,6 @@ class ExperimentContainer:
         # Add relation sources
         relation_sources = [self.dataset.get_hyponymy_relation_source()]
         if self.config["with_wordnet"]:
+            print("WordNetAccess.")
             relation_sources += [knowledge.WordNetAccess()]
         self.knowledge_base.add_hyponymy_relation(relation_sources)
