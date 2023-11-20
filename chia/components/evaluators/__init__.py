@@ -3,7 +3,7 @@ from chia.components.evaluators import accuracy, hierarchical, topk_accuracy
 from chia.components.evaluators.evaluator import Evaluator
 
 
-class EvaluatorFactory(components.Factory):
+class EvaluatorFactory(components.Factory.Factory):
     name_to_class_mapping = {
         "accuracy": accuracy.AccuracyEvaluator,
         "topk_accuracy": topk_accuracy.TopKAccuracyEvaluator,

@@ -113,5 +113,5 @@ class KerasDataAugmentation:
         return crops[0]
 
 
-class KerasDataAugmentationFactory(components.Factory):
+class KerasDataAugmentationFactory(components.Factory.Factory):
     name_to_class_mapping = KerasDataAugmentation

@@ -7,7 +7,7 @@ from chia.components.extrapolators.extrapolator import (
 )
 
 
-class ExtrapolatorFactory(components.Factory):
+class ExtrapolatorFactory(components.Factory.Factory):
     name_to_class_mapping = {
         "do_nothing": DoNothingExtrapolator,
         "simple_threshold": fixed.SimpleThresholdExtrapolator,

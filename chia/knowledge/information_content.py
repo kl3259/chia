@@ -74,7 +74,7 @@ class Zhou2008ModifiedICC(InformationContentCalculator):
         return math.fabs(index)
 
 
-class InformationContentCalculatorFactory(components.Factory):
+class InformationContentCalculatorFactory(components.Factory.Factory):
     name_to_class_mapping = {
         "sanchez_2011_original": Sanchez2011OriginalICC,
         "sanchez_2011_modified": Sanchez2011ModifiedICC,

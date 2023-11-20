@@ -148,5 +148,5 @@ class KnowledgeBase(instrumentation.Observable, instrumentation.Observer):
         self.notify(message)
 
 
-class KnowledgeBaseFactory(components.Factory):
+class KnowledgeBaseFactory(components.Factory.Factory):
     name_to_class_mapping = KnowledgeBase

@@ -2,6 +2,7 @@ import argparse
 
 import config as pcfg
 
+import chia
 from chia import containers, helpers, instrumentation
 
 
@@ -47,6 +48,5 @@ if __name__ == "__main__":
     parser.add_argument("config_file", type=str, nargs="+")
     args = parser.parse_args()
     print(args.config_file)
-    breakpoint()
     main(config_files=args.config_file)
     

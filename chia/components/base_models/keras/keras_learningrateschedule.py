@@ -74,7 +74,7 @@ class ExponentialKerasLearningRateSchedule(KerasLearningRateSchedule):
         return current_lr
 
 
-class KerasLearningRateScheduleFactory(components.Factory):
+class KerasLearningRateScheduleFactory(components.Factory.Factory):
     name_to_class_mapping = {
         "constant": ConstantKerasLearningRateSchedule,
         "sgdr": SGDRKerasLearningRateSchedule,

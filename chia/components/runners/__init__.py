@@ -3,7 +3,7 @@ from chia.components.runners import epoch
 from chia.components.runners.runner import Runner
 
 
-class RunnerFactory(components.Factory):
+class RunnerFactory(components.Factory.Factory):
     name_to_class_mapping = {"epoch": epoch.EpochRunner}
 
 

@@ -222,6 +222,6 @@ def _get_weight(sample):
         return 1.0
 
 
-class KerasTrainerFactory(components.Factory):
+class KerasTrainerFactory(components.Factory.Factory):
     name_to_class_mapping = {"fast_single_shot": KerasFastSingleShotTrainer}
     default_section = "keras_trainer"

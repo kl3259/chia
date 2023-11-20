@@ -129,6 +129,6 @@ class KerasFeatureExtractor(instrumentation.Observable):
         return self.feature_extractor(image_batch, training)
 
 
-class KerasFeatureExtractorFactory(components.Factory):
+class KerasFeatureExtractorFactory(components.Factory.Factory):
     name_to_class_mapping = KerasFeatureExtractor
     default_section = "keras_feature_extractor"

@@ -7,7 +7,7 @@ from chia.components.classifiers import (
 )
 
 
-class ClassifierFactory(components.Factory):
+class ClassifierFactory(components.Factory.Factory):
     name_to_class_mapping = {
         "chillax": keras_chillax_hc.CHILLAXEmbeddingBasedKerasHC,
         "keras_idk": keras_idk_hc.IDKEmbeddingBasedKerasHC,

@@ -167,6 +167,6 @@ def _get_input_img_np(sample):
     return sample.get_resource("input_img_np")
 
 
-class KerasBaseModelFactory(components.Factory):
+class KerasBaseModelFactory(components.Factory.Factory):
     name_to_class_mapping = KerasBaseModel
     default_section = "keras_base_model"

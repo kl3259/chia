@@ -55,6 +55,6 @@ class KerasPreprocessor:
         )
 
 
-class KerasPreprocessorFactory(components.Factory):
+class KerasPreprocessorFactory(components.Factory.Factory):
     name_to_class_mapping = KerasPreprocessor
     default_section = "keras_preprocessor"

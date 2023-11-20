@@ -13,7 +13,7 @@ from chia.components.datasets import (
 )
 
 
-class DatasetFactory(components.Factory):
+class DatasetFactory(components.Factory.Factory):
     name_to_class_mapping = {
         "core50": core50_dataset.CORe50Dataset,
         "cub2002011": cub2002011_dataset.CUB2002011Dataset,
